@@ -36,7 +36,7 @@ export function ButtonGrid({ setDisplay }: ButtonGridProps) {
     let result = calculate({ first, second, action });
     setResult(result);
 
-    // TODO we are clearing here, but we could also replace firstValue with result, and continue chaining operations
+    // TODO we are resetting here, but we could also replace firstValue with result, and continue chaining operations
     reset();
     // setPrevValue(result);
     // setCurrValue("0");
@@ -54,13 +54,16 @@ export function ButtonGrid({ setDisplay }: ButtonGridProps) {
   };
 
   const handleAlter = (alt: AlterTypes) => {
+    let altered: number;
     switch (alt) {
       case "%":
-        console.log("curr * 0.01");
+        altered = +currValue * 0.01;
         break;
       case "+/-":
-        console.log("curr * -1");
+        altered = +currValue * -1;
+        break;
     }
+    setCurrValue(altered.toString());
   };
 
   return (
