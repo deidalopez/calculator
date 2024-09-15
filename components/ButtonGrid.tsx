@@ -188,8 +188,6 @@ export function ButtonGrid({ setDisplay }: ButtonGridProps) {
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: "red",
-    borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
     width: "90%",

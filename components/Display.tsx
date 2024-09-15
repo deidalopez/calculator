@@ -10,7 +10,7 @@ export function Display({ value }: DisplayProps) {
   return (
     <View style={styles.container}>
       <ThemedText
-        style={value.length > 10 ? styles.smallerText : styles.text}
+        style={value.length > 7 ? styles.smallerText : styles.text}
         numberOfLines={1}
       >
         {value}
@@ -23,8 +23,6 @@ export const MemoizedDisplay = React.memo(Display);
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: "red",
-    borderWidth: 1,
     alignItems: "flex-end",
     justifyContent: "center",
     width: "90%",
@@ -33,7 +31,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 70,
-    lineHeight: 90,
+    lineHeight: 80,
     fontWeight: 300,
   },
   smallerText: {
