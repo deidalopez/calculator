@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 70,
-    lineHeight: 80,
+    lineHeight: 85,
     fontWeight: 300,
   },
   smallerText: {

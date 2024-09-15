@@ -9,38 +9,27 @@ type ButtonGridProps = {
 };
 
 export function ButtonGrid({ setDisplay }: ButtonGridProps) {
-  const [firstValue, setFirstValue] = useState("0");
-  const [secondValue, setSecondValue] = useState("0");
+  const [currValue, setCurrValue] = useState("0");
+  const [prevValue, setPrevValue] = useState("0");
   const [operator, setOperator] = useState<OperatorTypes | null>(null);
   const [result, setResult] = useState("0");
 
   useEffect(() => {
-    if (secondValue !== "0") {
-      setDisplay(secondValue);
-    } else {
-      setDisplay(firstValue);
-    }
-  }, [firstValue, secondValue]);
+    setDisplay(currValue);
+  }, [currValue]);
 
   useEffect(() => {
     setDisplay(result);
   }, [result]);
 
   const handleNumberPress = (value: string) => {
-    // FIXME not sure if basing it off a present operator will work well...
-    if (!operator) {
-      firstValue === "0"
-        ? setFirstValue(value)
-        : setFirstValue(firstValue + value);
-    } else {
-      secondValue === "0"
-        ? setSecondValue(value)
-        : setSecondValue(secondValue + value);
-    }
+    currValue === "0" ? setCurrValue(value) : setCurrValue(currValue + value);
   };
 
   const handleOperatorPress = (op: OperatorTypes) => {
     setOperator(op);
+    setPrevValue(currValue);
+    setCurrValue("0");
   };
 
   const handleEnter = ({ first, second, action }: ResultCalcType) => {
@@ -49,11 +38,13 @@ export function ButtonGrid({ setDisplay }: ButtonGridProps) {
 
     // TODO we are clearing here, but we could also replace firstValue with result, and continue chaining operations
     reset();
+    // setPrevValue(result);
+    // setCurrValue("0");
   };
 
   const reset = () => {
-    setFirstValue("0");
-    setSecondValue("0");
+    setCurrValue("0");
+    setPrevValue("0");
     setOperator(null);
   };
 
@@ -62,14 +53,7 @@ export function ButtonGrid({ setDisplay }: ButtonGridProps) {
     setResult("0");
   };
 
-  const ViewOperation = () => (
-    <View>
-      <Text> {`${firstValue} ${operator} ${secondValue}`}</Text>
-    </View>
-  );
-
   const handleAlter = (alt: AlterTypes) => {
-    console.log("alt " + alt);
     switch (alt) {
       case "%":
         console.log("curr * 0.01");
@@ -81,7 +65,6 @@ export function ButtonGrid({ setDisplay }: ButtonGridProps) {
 
   return (
     <View style={styles.container}>
-      <ViewOperation />
       <View style={styles.row}>
         <Button value="AC" type="secondary" onPress={handleClearPress} />
         <Button
@@ -142,19 +125,20 @@ export function ButtonGrid({ setDisplay }: ButtonGridProps) {
       </View>
       <View style={styles.row}>
         <Button
-          value="3"
+          value="1"
           type="number"
-          onPress={() => handleNumberPress("3")}
+          onPress={() => handleNumberPress("1")}
         />
+
         <Button
           value="2"
           type="number"
           onPress={() => handleNumberPress("2")}
         />
         <Button
-          value="1"
+          value="3"
           type="number"
-          onPress={() => handleNumberPress("1")}
+          onPress={() => handleNumberPress("3")}
         />
         <Button
           value="+"
@@ -175,8 +159,8 @@ export function ButtonGrid({ setDisplay }: ButtonGridProps) {
           onPress={() =>
             operator &&
             handleEnter({
-              first: firstValue,
-              second: secondValue,
+              first: prevValue,
+              second: currValue,
               action: operator,
             })
           }

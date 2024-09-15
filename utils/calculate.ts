@@ -5,7 +5,6 @@ const calculate = ({ first, second, action }: ResultCalcType): string => {
   switch (action) {
     case "+":
       res = +first + +second;
-      console.log("res  " + res);
       break;
     case "-":
       res = +first - +second;
@@ -14,15 +13,15 @@ const calculate = ({ first, second, action }: ResultCalcType): string => {
       res = +first * +second;
       break;
     case "/":
-      // handle if trying to divide by 0
-      if (second === "0") {
-        return "Err";
-      }
       res = +first / +second;
       break;
     default:
       res = 0;
       break;
+  }
+
+  if (!isFinite(res)) {
+    return "Err";
   }
 
   return res.toString();
