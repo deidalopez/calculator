@@ -1,10 +1,11 @@
+import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { ThemedText } from "./ThemedText";
-import React from "react";
-type ButtonTypes = "number" | "operator" | "secondary" | "wide";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { OperatorTypes, ButtonTypes } from "@/types";
 
 type ButtonProps = {
-  value: string;
+  value: string | OperatorTypes;
   type: ButtonTypes;
   onPress: () => void;
 };
@@ -22,6 +23,16 @@ export function Button({ value, type, onPress }: ButtonProps) {
         return styles.container;
     }
   };
+
+  if (value === "/") {
+    return (
+      <TouchableOpacity onPress={onPress} style={getCustomStyle()}>
+        <ThemedText>
+          <FontAwesome6 name="divide" size={24} color="white" />
+        </ThemedText>
+      </TouchableOpacity>
+    );
+  }
 
   return (
     <TouchableOpacity onPress={onPress} style={getCustomStyle()}>

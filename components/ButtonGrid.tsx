@@ -1,8 +1,9 @@
-import { Text, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { MemoizedButton as Button } from "./Button";
 import { useEffect, useState } from "react";
 import { OperatorTypes, ResultCalcType } from "@/types";
 import { calculate } from "@/utils/calculate";
+
 type AlterTypes = "+/-" | "%";
 type ButtonGridProps = {
   setDisplay: (val: string) => void;

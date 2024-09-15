@@ -6,4 +6,6 @@ type ResultCalcType = {
   action: OperatorTypes;
 };
 
-export { OperatorTypes, ResultCalcType };
+type ButtonTypes = "number" | "operator" | "secondary" | "wide";
+
+export { OperatorTypes, ResultCalcType, ButtonTypes };
