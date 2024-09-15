@@ -1,5 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import { ThemedText } from "./ThemedText";
+import React from "react";
 
 type DisplayProps = {
   value: string;
@@ -17,6 +18,8 @@ export function Display({ value }: DisplayProps) {
     </View>
   );
 }
+
+export const MemoizedDisplay = React.memo(Display);
 
 const styles = StyleSheet.create({
   container: {

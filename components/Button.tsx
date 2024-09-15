@@ -1,5 +1,6 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { ThemedText } from "./ThemedText";
+import React from "react";
 type ButtonTypes = "number" | "operator" | "secondary" | "wide";
 
 type ButtonProps = {
@@ -30,6 +31,8 @@ export function Button({ value, type, onPress }: ButtonProps) {
     </TouchableOpacity>
   );
 }
+
+export const MemoizedButton = React.memo(Button);
 
 const styles = StyleSheet.create({
   container: {
