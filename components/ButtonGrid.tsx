@@ -1,22 +1,22 @@
 import { Text, View, StyleSheet } from "react-native";
 import { Button } from "./Button";
-import { useState } from "react";
-
-type OperatorTypes = "/" | "x" | "-" | "+" | "=";
-
-type ButtonGridProps = {};
-
-type ResultCalcType = {
-  first: string;
-  second: string;
-  action: OperatorTypes;
+import { useEffect, useState } from "react";
+import { OperatorTypes, ResultCalcType } from "@/types";
+import { calculate } from "@/utils/calculate";
+type AlterTypes = "+/-" | "%";
+type ButtonGridProps = {
+  setDisplay: (val: string) => void;
 };
 
-export function ButtonGrid() {
+export function ButtonGrid({ setDisplay }: ButtonGridProps) {
   const [firstValue, setFirstValue] = useState("0");
   const [secondValue, setSecondValue] = useState("0");
   const [operator, setOperator] = useState<OperatorTypes | null>(null);
-  // const [result, setResult] = useState(0);
+  const [result, setResult] = useState("0");
+
+  useEffect(() => {
+    setDisplay(result);
+  }, [result]);
 
   const handleNumberPress = (value: string) => {
     // FIXME not sure if basing it off a present operator will work well...
@@ -36,10 +36,10 @@ export function ButtonGrid() {
   };
 
   const handleEnter = ({ first, second, action }: ResultCalcType) => {
-    console.log("Return result of firstVal op secondVal");
-    console.log(`${first} ${action} ${second}`);
-    // return result
-    // TODO, we are clearing here, but we could also replace firstValue with result, and continue chaining operations
+    let result = calculate({ first, second, action });
+    setResult(result);
+
+    // TODO we are clearing here, but we could also replace firstValue with result, and continue chaining operations
     handleClear();
   };
 
@@ -55,14 +55,28 @@ export function ButtonGrid() {
     </View>
   );
 
-  const handlePress = () => console.log("press");
+  const handleAlter = (alt: AlterTypes) => {
+    console.log("alt " + alt);
+    switch (alt) {
+      case "%":
+        console.log("curr * 0.01");
+        break;
+      case "+/-":
+        console.log("curr * -1");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ViewOperation />
       <View style={styles.row}>
         <Button value="AC" type="secondary" onPress={handleClear} />
-        <Button value="+/-" type="secondary" onPress={handlePress} />
-        <Button value="%" type="secondary" onPress={handlePress} />
+        <Button
+          value="+/-"
+          type="secondary"
+          onPress={() => handleAlter("+/-")}
+        />
+        <Button value="%" type="secondary" onPress={() => handleAlter("%")} />
         <Button
           value="/"
           type="operator"

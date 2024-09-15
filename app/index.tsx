@@ -9,7 +9,7 @@ export default function Index() {
   return (
     <View style={styles.container}>
       <Display value={displayValue} />
-      <ButtonGrid />
+      <ButtonGrid setDisplay={setDisplayValue} />
     </View>
   );
 }
