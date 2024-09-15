@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet } from "react-native";
-import { Button } from "./Button";
+import { MemoizedButton as Button } from "./Button";
 import { useEffect, useState } from "react";
 import { OperatorTypes, ResultCalcType } from "@/types";
 import { calculate } from "@/utils/calculate";
@@ -13,6 +13,14 @@ export function ButtonGrid({ setDisplay }: ButtonGridProps) {
   const [secondValue, setSecondValue] = useState("0");
   const [operator, setOperator] = useState<OperatorTypes | null>(null);
   const [result, setResult] = useState("0");
+
+  useEffect(() => {
+    if (secondValue !== "0") {
+      setDisplay(secondValue);
+    } else {
+      setDisplay(firstValue);
+    }
+  }, [firstValue, secondValue]);
 
   useEffect(() => {
     setDisplay(result);
@@ -40,13 +48,18 @@ export function ButtonGrid({ setDisplay }: ButtonGridProps) {
     setResult(result);
 
     // TODO we are clearing here, but we could also replace firstValue with result, and continue chaining operations
-    handleClear();
+    reset();
   };
 
-  const handleClear = () => {
+  const reset = () => {
     setFirstValue("0");
     setSecondValue("0");
     setOperator(null);
+  };
+
+  const handleClearPress = () => {
+    reset();
+    setResult("0");
   };
 
   const ViewOperation = () => (
@@ -70,7 +83,7 @@ export function ButtonGrid({ setDisplay }: ButtonGridProps) {
     <View style={styles.container}>
       <ViewOperation />
       <View style={styles.row}>
-        <Button value="AC" type="secondary" onPress={handleClear} />
+        <Button value="AC" type="secondary" onPress={handleClearPress} />
         <Button
           value="+/-"
           type="secondary"
@@ -150,11 +163,7 @@ export function ButtonGrid({ setDisplay }: ButtonGridProps) {
         />
       </View>
       <View style={styles.row}>
-        <Button
-          value="0"
-          type="number"
-          onPress={() => handleNumberPress("0")}
-        />
+        <Button value="0" type="wide" onPress={() => handleNumberPress("0")} />
         <Button
           value="."
           type="number"
@@ -184,13 +193,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "90%",
-    height: "50%",
+    height: "55%",
     gap: 12,
   },
   row: {
     flexDirection: "row",
-    borderColor: "red",
-    borderWidth: 1,
     gap: 12,
+    flex: 1,
   },
 });
