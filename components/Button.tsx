@@ -36,7 +36,7 @@ export function Button({ value, type, onPress }: ButtonProps) {
 
   return (
     <TouchableOpacity onPress={onPress} style={getCustomStyle()}>
-      <ThemedText style={type == "secondary" && styles.darkText}>
+      <ThemedText style={type === "secondary" && styles.darkText}>
         {value}
       </ThemedText>
     </TouchableOpacity>
@@ -68,6 +68,12 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   darkText: {
+    color: "black",
+  },
+  selected: {
+    backgroundColor: "white",
+  },
+  selectedText: {
     color: "black",
   },
 });

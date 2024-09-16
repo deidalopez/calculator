@@ -17,14 +17,20 @@ export function ButtonGrid({ setDisplay }: ButtonGridProps) {
 
   useEffect(() => {
     setDisplay(currValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currValue]);
 
   useEffect(() => {
     setDisplay(result);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result]);
 
   const handleNumberPress = (value: string) => {
-    currValue === "0" ? setCurrValue(value) : setCurrValue(currValue + value);
+    if (currValue === "0") {
+      setCurrValue(value);
+    } else {
+      setCurrValue(currValue + value);
+    }
   };
 
   const handleOperatorPress = (op: OperatorTypes) => {
