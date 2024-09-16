@@ -1,30 +1,19 @@
 
+# Coding Assignment
 
-# Welcome to your Expo app 👋
+## TODO's
+- Highlight the selected operator by passing a "selected" prop to Buttons and udpating style
+- Chain operations (prevValue to become result, and following operations to take a new currValue
+- Format display value in scientific notation after 10 digits
+- Add unit testing
+- Would've been cool to implement horizontal view
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-## Get started
+## Bugs
+- When you press "=", the display value is 0, and that's confusing
+- It looks smaller than expected (should've used full width, and larger numbers)
+- AC should become C when currValue is set, and pressing it should remove the value of currValue, but keep prevValue (I think) 
 
-1. Install dependencies
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-# calculator
+Preview
+![IMG_3725](https://github.com/user-attachments/assets/0575c308-86af-42cf-9ef5-8c8471e74804)
