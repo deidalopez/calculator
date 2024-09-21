@@ -1,5 +1,5 @@
 import { OperatorTypes, AlterTypes } from "@/types";
-import { calculate } from "@/utils/calculate";
+import { calculate, alterNumber } from "@/utils/calculate";
 
 type GridStateType = {
   currValue: string;
@@ -68,7 +68,12 @@ export function calculateReducer(state: GridStateType, action: GridAction) {
         prevValue: state.currValue,
         currValue: "0",
       };
-
+    case ActionTypes.ALTER_PRESS:
+      return {
+        ...state,
+        displayValue: alterNumber(action.payload, state.currValue),
+        currValue: alterNumber(action.payload, state.currValue),
+      };
     case ActionTypes.CLEAR_PRESS:
       return {
         operator: null,
