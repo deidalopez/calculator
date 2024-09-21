@@ -8,4 +8,6 @@ type ResultCalcType = {
 
 type ButtonTypes = "number" | "operator" | "secondary" | "wide";
 
-export { OperatorTypes, ResultCalcType, ButtonTypes };
+type AlterTypes = "+/-" | "%";
+
+export { OperatorTypes, ResultCalcType, ButtonTypes, AlterTypes };
