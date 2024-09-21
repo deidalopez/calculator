@@ -1,4 +1,4 @@
-import { ResultCalcType } from "@/types";
+import { AlterTypes, ResultCalcType } from "@/types";
 
 const calculate = ({ first, second, action }: ResultCalcType): string => {
   let res: number;
@@ -27,4 +27,17 @@ const calculate = ({ first, second, action }: ResultCalcType): string => {
   return res.toString();
 };
 
-export { calculate };
+const alterNumber = (alt: AlterTypes, value: string) => {
+  let altered: number;
+  switch (alt) {
+    case "%":
+      altered = +value * 0.01;
+      break;
+    case "+/-":
+      altered = +value * -1;
+      break;
+  }
+  return altered.toString();
+};
+
+export { calculate, alterNumber };
