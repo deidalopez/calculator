@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { MemoizedButton as Button } from "./Button";
 import { useEffect, useState } from "react";
 import { OperatorTypes, ResultCalcType } from "@/types";
@@ -13,40 +13,52 @@ export function ButtonGrid({ setDisplay }: ButtonGridProps) {
   const [currValue, setCurrValue] = useState("0");
   const [prevValue, setPrevValue] = useState("0");
   const [operator, setOperator] = useState<OperatorTypes | null>(null);
-  const [result, setResult] = useState("0");
 
   useEffect(() => {
-    setDisplay(currValue);
+    if (currValue === "0") {
+      setDisplay(prevValue);
+    } else {
+      setDisplay(currValue);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currValue]);
-
-  useEffect(() => {
-    setDisplay(result);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [result]);
+  }, [prevValue, currValue]);
 
   const handleNumberPress = (value: string) => {
+    if (value === "." && currValue.includes(".")) {
+      return;
+    }
     if (currValue === "0") {
-      setCurrValue(value);
+      if (value === ".") {
+        setCurrValue(currValue + value);
+      } else setCurrValue(value);
     } else {
       setCurrValue(currValue + value);
     }
   };
 
   const handleOperatorPress = (op: OperatorTypes) => {
-    setOperator(op);
-    setPrevValue(currValue);
-    setCurrValue("0");
+    if (prevValue !== "0" && operator) {
+      let result = calculate({
+        first: prevValue,
+        second: currValue,
+        action: operator,
+      });
+      setPrevValue(result);
+      setOperator(op);
+      setCurrValue("0");
+    } else {
+      setOperator(op);
+      setPrevValue(currValue);
+      setCurrValue("0");
+    }
   };
 
   const handleEnter = ({ first, second, action }: ResultCalcType) => {
     let result = calculate({ first, second, action });
-    setResult(result);
+    setDisplay(result);
 
-    // TODO we are resetting here, but we could also replace firstValue with result, and continue chaining operations
-    reset();
-    // setPrevValue(result);
-    // setCurrValue("0");
+    setPrevValue(result);
+    setCurrValue("0");
   };
 
   const reset = () => {
@@ -57,24 +69,31 @@ export function ButtonGrid({ setDisplay }: ButtonGridProps) {
 
   const handleClearPress = () => {
     reset();
-    setResult("0");
   };
 
   const handleAlter = (alt: AlterTypes) => {
     let altered: number;
     switch (alt) {
       case "%":
-        altered = +currValue * 0.01;
+        altered = +(currValue === "0" ? prevValue : currValue) * 0.01;
         break;
       case "+/-":
-        altered = +currValue * -1;
+        altered = +(currValue === "0" ? prevValue : currValue) * -1;
         break;
     }
-    setCurrValue(altered.toString());
+
+    if (currValue === "0") {
+      setPrevValue(altered.toString());
+    } else {
+      setCurrValue(altered.toString());
+    }
   };
 
   return (
     <View style={styles.container}>
+      <Text
+        style={{ color: "white" }}
+      >{`${prevValue} ${operator} ${currValue}`}</Text>
       <View style={styles.row}>
         <Button value="AC" type="secondary" onPress={handleClearPress} />
         <Button
