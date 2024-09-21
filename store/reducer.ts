@@ -1,13 +1,5 @@
-import { OperatorTypes, AlterTypes } from "@/types";
+import { OperatorTypes, AlterTypes, GridStateType } from "@/types";
 import { calculate, alterNumber } from "@/utils/calculate";
-
-type GridStateType = {
-  currValue: string;
-  prevValue: string;
-  operator: OperatorTypes | null;
-  result: string;
-  displayValue: string;
-};
 
 // Define the Actions
 export enum ActionTypes {
@@ -50,6 +42,9 @@ export type GridAction =
 export function calculateReducer(state: GridStateType, action: GridAction) {
   switch (action.type) {
     case ActionTypes.NUMBER_PRESS:
+      if (action.payload === "." && state.currValue.includes(".")) {
+        return state;
+      }
       return {
         ...state,
         displayValue:
@@ -58,21 +53,30 @@ export function calculateReducer(state: GridStateType, action: GridAction) {
             : state.currValue + action.payload,
         currValue:
           state.currValue === "0"
-            ? action.payload
+            ? action.payload === "."
+              ? state.currValue + action.payload
+              : action.payload
             : state.currValue + action.payload,
       };
     case ActionTypes.OPERATOR_PRESS:
+      if (state.prevValue !== "0" && state.operator) {
+        let result = calculate({
+          first: state.prevValue,
+          second: state.currValue,
+          action: state.operator,
+        });
+        return {
+          ...state,
+          prevValue: result,
+          operator: action.payload,
+          currValue: "0",
+        };
+      }
       return {
         ...state,
-        operator: action.payload,
         prevValue: state.currValue,
+        operator: action.payload,
         currValue: "0",
-      };
-    case ActionTypes.ALTER_PRESS:
-      return {
-        ...state,
-        displayValue: alterNumber(action.payload, state.currValue),
-        currValue: alterNumber(action.payload, state.currValue),
       };
     case ActionTypes.CLEAR_PRESS:
       return {
@@ -81,6 +85,15 @@ export function calculateReducer(state: GridStateType, action: GridAction) {
         prevValue: "0",
         result: "0",
         displayValue: "0",
+      };
+    case ActionTypes.ALTER_PRESS:
+      return {
+        ...state,
+        displayValue: alterNumber(action.payload, state.currValue),
+        currValue:
+          state.currValue === "0"
+            ? alterNumber(action.payload, state.prevValue)
+            : alterNumber(action.payload, state.currValue),
       };
     case ActionTypes.RESULT_PRESS:
       // TODO if actionPress ENTER, then set prevValue as result, and clear currValue... maybe new value, display value?
