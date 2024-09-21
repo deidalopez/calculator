@@ -1,198 +1,81 @@
 import { View, StyleSheet, Text } from "react-native";
 import { MemoizedButton as Button } from "./Button";
-import { useEffect, useState } from "react";
-import { OperatorTypes, ResultCalcType, AlterTypes } from "@/types";
-import { calculate } from "@/utils/calculate";
+import { OperatorTypes, AlterTypes, GridStateType } from "@/types";
 
 type ButtonGridProps = {
-  setDisplay: (val: string) => void;
+  onNumberPress: (value: string) => void;
+  onOperatorPress: (value: OperatorTypes) => void;
+  onAlterPress: (value: AlterTypes) => void;
+  onEnterPress: () => void;
+  onClearPress: () => void;
+  state: GridStateType;
 };
+export function ButtonGrid({
+  onNumberPress,
+  onOperatorPress,
+  onAlterPress,
+  onEnterPress,
+  onClearPress,
+  state,
+}: ButtonGridProps) {
+  const { prevValue, currValue, operator, result } = state;
 
-export function ButtonGrid({ setDisplay }: ButtonGridProps) {
-  const [currValue, setCurrValue] = useState("0");
-  const [prevValue, setPrevValue] = useState("0");
-  const [operator, setOperator] = useState<OperatorTypes | null>(null);
-
-  useEffect(() => {
-    if (currValue === "0") {
-      setDisplay(prevValue);
-    } else {
-      setDisplay(currValue);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prevValue, currValue]);
-
-  const handleNumberPress = (value: string) => {
-    if (value === "." && currValue.includes(".")) {
-      return;
-    }
-    if (currValue === "0") {
-      if (value === ".") {
-        setCurrValue(currValue + value);
-      } else setCurrValue(value);
-    } else {
-      setCurrValue(currValue + value);
-    }
+  const renderNumberButtons = (numbers: string[]) => {
+    return numbers.map((number) => (
+      <Button
+        key={number}
+        value={number}
+        type="number"
+        onPress={() => onNumberPress(number)}
+      />
+    ));
   };
 
-  const handleOperatorPress = (op: OperatorTypes) => {
-    if (prevValue !== "0" && operator) {
-      let result = calculate({
-        first: prevValue,
-        second: currValue,
-        action: operator,
-      });
-      setPrevValue(result);
-      setOperator(op);
-      setCurrValue("0");
-    } else {
-      setOperator(op);
-      setPrevValue(currValue);
-      setCurrValue("0");
-    }
-  };
-
-  const handleEnter = ({ first, second, action }: ResultCalcType) => {
-    let result = calculate({ first, second, action });
-    setDisplay(result);
-
-    setPrevValue(result);
-    setCurrValue("0");
-  };
-
-  const reset = () => {
-    setCurrValue("0");
-    setPrevValue("0");
-    setOperator(null);
-  };
-
-  const handleClearPress = () => {
-    reset();
-  };
-
-  const handleAlter = (alt: AlterTypes) => {
-    let altered: number;
-    switch (alt) {
-      case "%":
-        altered = +(currValue === "0" ? prevValue : currValue) * 0.01;
-        break;
-      case "+/-":
-        altered = +(currValue === "0" ? prevValue : currValue) * -1;
-        break;
-    }
-
-    if (currValue === "0") {
-      setPrevValue(altered.toString());
-    } else {
-      setCurrValue(altered.toString());
-    }
+  const renderOperatorButton = (op: OperatorTypes) => {
+    return (
+      <Button value={op} type="operator" onPress={() => onOperatorPress(op)} />
+    );
   };
 
   return (
     <View style={styles.container}>
-      <Text
-        style={{ color: "white" }}
-      >{`${prevValue} ${operator} ${currValue}`}</Text>
+      <View>
+        <Text style={{ color: "white" }}>
+          {`${prevValue} ${operator} ${currValue} = ${result}`}
+        </Text>
+      </View>
       <View style={styles.row}>
-        <Button value="AC" type="secondary" onPress={handleClearPress} />
+        <Button
+          // FIXME i dont think this is the right logic
+          // value={state.prevValue !== "0" ? "C" : "AC"}
+          value={prevValue !== "0" ? "C" : "AC"}
+          type="secondary"
+          onPress={onClearPress}
+        />
         <Button
           value="+/-"
           type="secondary"
-          onPress={() => handleAlter("+/-")}
+          onPress={() => onAlterPress("+/-")}
         />
-        <Button value="%" type="secondary" onPress={() => handleAlter("%")} />
-        <Button
-          value="/"
-          type="operator"
-          onPress={() => handleOperatorPress("/")}
-        />
+        <Button value="%" type="secondary" onPress={() => onAlterPress("%")} />
+        {renderOperatorButton("/")}
       </View>
       <View style={styles.row}>
-        <Button
-          value="7"
-          type="number"
-          onPress={() => handleNumberPress("7")}
-        />
-        <Button
-          value="8"
-          type="number"
-          onPress={() => handleNumberPress("8")}
-        />
-        <Button
-          value="9"
-          type="number"
-          onPress={() => handleNumberPress("9")}
-        />
-        <Button
-          value="x"
-          type="operator"
-          onPress={() => handleOperatorPress("x")}
-        />
+        {renderNumberButtons(["7", "8", "9"])}
+        {renderOperatorButton("x")}
       </View>
       <View style={styles.row}>
-        <Button
-          value="4"
-          type="number"
-          onPress={() => handleNumberPress("4")}
-        />
-        <Button
-          value="5"
-          type="number"
-          onPress={() => handleNumberPress("5")}
-        />
-        <Button
-          value="6"
-          type="number"
-          onPress={() => handleNumberPress("6")}
-        />
-        <Button
-          value="-"
-          type="operator"
-          onPress={() => handleOperatorPress("-")}
-        />
+        {renderNumberButtons(["4", "5", "6"])}
+        {renderOperatorButton("-")}
       </View>
       <View style={styles.row}>
-        <Button
-          value="1"
-          type="number"
-          onPress={() => handleNumberPress("1")}
-        />
-
-        <Button
-          value="2"
-          type="number"
-          onPress={() => handleNumberPress("2")}
-        />
-        <Button
-          value="3"
-          type="number"
-          onPress={() => handleNumberPress("3")}
-        />
-        <Button
-          value="+"
-          type="operator"
-          onPress={() => handleOperatorPress("+")}
-        />
+        {renderNumberButtons(["1", "2", "3"])}
+        {renderOperatorButton("+")}
       </View>
       <View style={styles.row}>
-        <Button value="0" type="wide" onPress={() => handleNumberPress("0")} />
-        <Button
-          value="."
-          type="number"
-          onPress={() => handleNumberPress(".")}
-        />
-        <Button
-          value="="
-          type="operator"
-          onPress={() =>
-            operator &&
-            handleEnter({
-              first: prevValue,
-              second: currValue,
-              action: operator,
-            })
-          }
-        />
+        <Button value="0" type="wide" onPress={() => onNumberPress("0")} />
+        <Button value="." type="number" onPress={() => onNumberPress(".")} />
+        <Button value="=" type="operator" onPress={onEnterPress} />
       </View>
     </View>
   );
