@@ -1,4 +1,4 @@
-import { useState, useReducer } from "react";
+import { useReducer } from "react";
 import { View, StyleSheet } from "react-native";
 import { Display } from "./Display";
 import { ButtonGrid } from "./ButtonGrid";
@@ -13,7 +13,6 @@ const initialState: GridStateType = {
   displayValue: "0",
 };
 export default function Calculator() {
-  const [displayValue, setDisplayValue] = useState("0");
   const [state, dispatch] = useReducer(calculateReducer, initialState);
 
   const handleNumberPress = (value: string) => {

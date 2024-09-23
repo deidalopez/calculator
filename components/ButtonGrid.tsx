@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { MemoizedButton as Button } from "./Button";
 import { OperatorTypes, AlterTypes, GridStateType } from "@/types";
 
@@ -50,8 +50,6 @@ export function ButtonGrid({
     <View style={styles.container}>
       <View style={styles.row}>
         <Button
-          // FIXME i dont think this is the right logic
-          // value={state.prevValue !== "0" ? "C" : "AC"}
           value={prevValue !== "0" ? "C" : "AC"}
           type="secondary"
           onPress={onClearPress}
