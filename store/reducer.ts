@@ -69,6 +69,7 @@ export function calculateReducer(state: GridStateType, action: GridAction) {
           ...state,
           prevValue: result,
           operator: action.payload,
+          displayValue: result,
           currValue: "0",
         };
       }

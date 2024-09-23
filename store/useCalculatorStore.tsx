@@ -43,6 +43,7 @@ export const useCalculatorStore = create<CalculatorState>((set) => ({
         return {
           prevValue: result,
           operator: newOperator,
+          displayValue: result,
           currValue: "0",
         };
       }
