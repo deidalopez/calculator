@@ -103,4 +103,70 @@ describe("perform calculations", () => {
     expect(result).toHaveTextContent("62.4");
   });
 
+  test("perform division calculation", async () => {
+    const user = userEvent.setup();
+    render(<Calculator />);
+
+    await user.press(screen.getByText("8"));
+    await user.press(screen.getByTestId("/"));
+    await user.press(screen.getByText("2"));
+    await user.press(screen.getByText("="));
+
+    const result = await screen.findByRole("header");
+    expect(result).toHaveTextContent(/^4$/);
+  });
+
+  test("perform division by zero", async () => {
+    const user = userEvent.setup();
+    render(<Calculator />);
+
+    await user.press(screen.getByText("5"));
+    await user.press(screen.getByTestId("/"));
+    await user.press(screen.getByText("0"));
+    await user.press(screen.getByText("="));
+
+    const result = await screen.findByRole("header");
+    expect(result).toHaveTextContent("Err");
+  });
+
+  test("perform multiple calculations", async () => {
+    const user = userEvent.setup();
+    render(<Calculator />);
+
+    await user.press(screen.getByText("2"));
+    await user.press(screen.getByText("+"));
+    await user.press(screen.getByText("3"));
+    await user.press(screen.getByText("="));
+
+    let result = await screen.findByRole("header");
+    expect(result).toHaveTextContent("5");
+
+    await user.press(screen.getByText("AC"));
+    await user.press(screen.getByText("1"));
+    await user.press(screen.getByText("3"));
+    await user.press(screen.getByText("-"));
+    await user.press(screen.getByText("1"));
+    await user.press(screen.getByText("="));
+
+    result = await screen.findByRole("header");
+    expect(result).toHaveTextContent("12");
+
+    await user.press(screen.getByText("AC"));
+    await user.press(screen.getByText("4"));
+    await user.press(screen.getByText("x"));
+    await user.press(screen.getByText("2"));
+    await user.press(screen.getByText("="));
+
+    result = await screen.findByRole("header");
+    expect(result).toHaveTextContent("8");
+
+    await user.press(screen.getByText("AC"));
+    await user.press(screen.getByText("8"));
+    await user.press(screen.getByTestId("/"));
+    await user.press(screen.getByText("4"));
+    await user.press(screen.getByText("="));
+
+    result = await screen.findByRole("header");
+    expect(result).toHaveTextContent("2");
+  });
 });

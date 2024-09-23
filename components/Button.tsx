@@ -26,7 +26,7 @@ export function Button({ value, type, onPress }: ButtonProps) {
 
   if (value === "/") {
     return (
-      <TouchableOpacity onPress={onPress} style={getCustomStyle()}>
+      <TouchableOpacity onPress={onPress} style={getCustomStyle()} testID="/">
         <ThemedText>
           <FontAwesome6 name="divide" size={24} color="white" />
         </ThemedText>
