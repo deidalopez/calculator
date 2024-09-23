@@ -1,51 +1,50 @@
-import { useState, useReducer } from "react";
 import { View, StyleSheet } from "react-native";
 import { Display } from "./Display";
 import { ButtonGrid } from "./ButtonGrid";
-import { ActionTypes, calculateReducer } from "@/store/reducer";
-import { AlterTypes, GridStateType, OperatorTypes } from "@/types";
+import { AlterTypes, OperatorTypes } from "@/types";
+import { useCalculatorStore } from "@/store/useCalculatorStore";
 
-const initialState: GridStateType = {
-  currValue: "0",
-  prevValue: "0",
-  operator: "=",
-  result: "0",
-  displayValue: "0",
-};
 export default function Calculator() {
-  const [displayValue, setDisplayValue] = useState("0");
-  const [state, dispatch] = useReducer(calculateReducer, initialState);
+  const {
+    displayValue,
+    prevValue,
+    numberPress,
+    operatorPress,
+    alterPress,
+    clearPress,
+    resultPress,
+  } = useCalculatorStore();
 
   const handleNumberPress = (value: string) => {
-    dispatch({ type: ActionTypes.NUMBER_PRESS, payload: value });
+    numberPress(value);
   };
 
   const handleOperatorPress = (op: OperatorTypes) => {
-    dispatch({ type: ActionTypes.OPERATOR_PRESS, payload: op });
+    operatorPress(op);
   };
 
   const handleEnterPress = () => {
-    dispatch({ type: ActionTypes.RESULT_PRESS });
+    resultPress();
   };
 
   const handleClearPress = () => {
-    dispatch({ type: ActionTypes.CLEAR_PRESS });
+    clearPress();
   };
 
   const handleAlterPress = (alt: AlterTypes) => {
-    dispatch({ type: ActionTypes.ALTER_PRESS, payload: alt });
+    alterPress(alt);
   };
 
   return (
     <View style={styles.container}>
-      <Display value={state.displayValue} />
+      <Display value={displayValue} />
       <ButtonGrid
         onNumberPress={handleNumberPress}
         onOperatorPress={handleOperatorPress}
         onAlterPress={handleAlterPress}
         onEnterPress={handleEnterPress}
         onClearPress={handleClearPress}
-        state={state}
+        prevValue={prevValue}
       />
     </View>
   );
