@@ -5,10 +5,26 @@ import Calculator from "../Calculator";
 
 expect.extend(toBeOnTheScreen);
 
-test("render clear button ", () => {
-  render(<Calculator />);
-  // expect(screen.getByRole("header", { name: "0" })).toBeOnTheScreen();
-  const button = screen.getByRole("text", { name: "AC" });
-  expect(button).toBeTruthy();
-  // expect(screen.getByRole("text", { name: "AC" })).toBeOnTheScreen();
+describe("render correctly", () => {
+  test("render clear button ", () => {
+    render(<Calculator />);
+    const button = screen.getByRole("text", { name: "AC" });
+    expect(button).toBeTruthy();
+  });
+
+  test("render clear button ", () => {
+    render(<Calculator />);
+    const button = screen.getByRole("text", { name: "AC" });
+    expect(button).toBeTruthy();
+  });
+
+  test("render operators", () => {
+    render(<Calculator />);
+    const plusButton = screen.getByRole("text", { name: "+" });
+    expect(plusButton).toBeTruthy();
+    const minusButton = screen.getByRole("text", { name: "-" });
+    expect(minusButton).toBeTruthy();
+  });
 });
+
+
