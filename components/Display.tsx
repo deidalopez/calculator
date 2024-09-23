@@ -12,6 +12,7 @@ export function Display({ value }: DisplayProps) {
       <ThemedText
         style={value.length > 7 ? styles.smallerText : styles.text}
         numberOfLines={1}
+        accessibilityRole="header"
       >
         {value}
       </ThemedText>
