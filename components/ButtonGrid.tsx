@@ -18,7 +18,8 @@ export function ButtonGrid({
   onClearPress,
   state,
 }: ButtonGridProps) {
-  const { prevValue, currValue, operator, result } = state;
+  // const { prevValue, currValue, operator, result } = state;
+  const { prevValue } = state;
 
   const renderNumberButtons = (numbers: string[]) => {
     return numbers.map((number) => (
@@ -37,13 +38,16 @@ export function ButtonGrid({
     );
   };
 
+  // const DebugView = (
+  //   <View>
+  //     <Text style={{ color: "white" }}>
+  //       {`${prevValue} ${operator} ${currValue} = ${result}`}
+  //     </Text>
+  //   </View>
+  // );
+
   return (
     <View style={styles.container}>
-      <View>
-        <Text style={{ color: "white" }}>
-          {`${prevValue} ${operator} ${currValue} = ${result}`}
-        </Text>
-      </View>
       <View style={styles.row}>
         <Button
           // FIXME i dont think this is the right logic
