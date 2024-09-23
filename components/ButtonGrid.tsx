@@ -1,6 +1,6 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { MemoizedButton as Button } from "./Button";
-import { OperatorTypes, AlterTypes, GridStateType } from "@/types";
+import { OperatorTypes, AlterTypes } from "@/types";
 
 type ButtonGridProps = {
   onNumberPress: (value: string) => void;
@@ -8,7 +8,7 @@ type ButtonGridProps = {
   onAlterPress: (value: AlterTypes) => void;
   onEnterPress: () => void;
   onClearPress: () => void;
-  state: GridStateType;
+  prevValue: string;
 };
 export function ButtonGrid({
   onNumberPress,
@@ -16,10 +16,8 @@ export function ButtonGrid({
   onAlterPress,
   onEnterPress,
   onClearPress,
-  state,
+  prevValue,
 }: ButtonGridProps) {
-  const { prevValue, currValue, operator, result } = state;
-
   const renderNumberButtons = (numbers: string[]) => {
     return numbers.map((number) => (
       <Button
@@ -39,15 +37,8 @@ export function ButtonGrid({
 
   return (
     <View style={styles.container}>
-      <View>
-        <Text style={{ color: "white" }}>
-          {`${prevValue} ${operator} ${currValue} = ${result}`}
-        </Text>
-      </View>
       <View style={styles.row}>
         <Button
-          // FIXME i dont think this is the right logic
-          // value={state.prevValue !== "0" ? "C" : "AC"}
           value={prevValue !== "0" ? "C" : "AC"}
           type="secondary"
           onPress={onClearPress}
